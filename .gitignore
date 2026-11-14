@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Model weights & datasets
+*.gguf
+*.bin
+*.safetensors
+outputs/
+olmo_17e_edge_outputs/
+
+# Environment & OS
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
