@@ -22,7 +22,7 @@ export default function InferenceHub({
   const [copied, setCopied] = useState(false);
   const [copiedDistill, setCopiedDistill] = useState(false);
 
-  const distillCmd = `python colab/olmo_edge_distillation.py && ollama create olmo-17e-edge -f Modelfile`;
+  const distillCmd = `python colab/olmo_edge_distillation.py && ollama create olmo-quantum-edge -f Modelfile`;
   const launchCmd = `cd backend && pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8000 --reload`;
 
   const checkBackendHealth = async () => {
@@ -60,8 +60,8 @@ export default function InferenceHub({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {[
-            { id: 'offline', title: 'Offline', desc: 'Deterministic 17E CEMA Reference Engine' },
-            { id: 'ollama', title: 'Ollama', desc: 'Local or Colab Ngrok :11434' },
+            { id: 'offline', title: 'Offline', desc: 'Deterministic Quantum Physics Reference Engine' },
+            { id: 'ollama', title: 'Ollama', desc: 'Local or Colab Tunnel :11434' },
             { id: 'hf_pro', title: 'HF Pro', desc: 'Hugging Face Serverless / Dedicated API' }
           ].map((m) => (
             <button
@@ -101,7 +101,7 @@ export default function InferenceHub({
                 type="text"
                 value={ollamaModel}
                 onChange={(e) => setOllamaModel(e.target.value)}
-                placeholder="qwen-17e-cema"
+                placeholder="qwen-quantum-copilot"
                 className="w-full bg-zinc-950/70 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono text-zinc-100 focus:outline-none focus:border-white/25"
               />
             </div>
@@ -228,15 +228,15 @@ export default function InferenceHub({
           <div className="p-4 rounded-xl bg-zinc-950/60 border border-white/[0.06] space-y-1">
             <div className="text-zinc-100 font-medium">2. Student: OLMo-2 7B Edge</div>
             <div className="text-zinc-500 text-[11px]">
-              Exported to olmo-17e-edge.Q4_K_M.gguf for DDIL edge
+              Exported to olmo-quantum-edge.Q4_K_M.gguf for local workstation inference
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {[
-            { tag: 'qwen-17e-cema', title: 'qwen-17e-cema (27B Teacher)', desc: 'Colab / Workstation reasoning engine' },
-            { tag: 'olmo-17e-edge', title: 'olmo-17e-edge (7B Student)', desc: 'Compact tactical edge checkpoint' }
+            { tag: 'qwen-quantum-copilot', title: 'qwen-quantum-copilot (27B Teacher)', desc: 'Colab / Workstation reasoning engine' },
+            { tag: 'olmo-quantum-edge', title: 'olmo-quantum-edge (7B Student)', desc: 'Compact local edge checkpoint' }
           ].map((opt) => (
             <button
               key={opt.tag}

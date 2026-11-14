@@ -1,11 +1,11 @@
 """
-Q-SPECTRA // 17E Quantum CEMA Workbench
+Q-SPECTRA // Universal Quantum Home & Simulation Platform
 Turnkey Google Colab GPU Backend & Tunnel Launcher
 
 Usage inside a Google Colab GPU runtime:
     !git clone <repo-url> && cd q-spectra-17e-workbench
     !pip install -r backend/requirements.txt
-    !python colab/colab_live_backend.py --model qwen-17e-cema --tunnel cloudflared
+    !python colab/colab_live_backend.py --model qwen-quantum-copilot --tunnel cloudflared
 
 Or with ngrok (requires NGROK_AUTHTOKEN env var or --ngrok-token):
     !NGROK_AUTHTOKEN=... python colab/colab_live_backend.py --tunnel ngrok
@@ -139,7 +139,7 @@ def launch_cloudflared_tunnel(port: int) -> subprocess.Popen:
 
     if public_url:
         print("\n" + "=" * 68)
-        print("  Q-SPECTRA 17E LIVE COLAB BACKEND READY")
+        print("  Q-SPECTRA QUANTUM HOME LIVE COLAB BACKEND READY")
         print(f"  Public HTTPS Bridge URL : {public_url}")
         print(f"  Health Endpoint         : {public_url}/api/health")
         print("  Paste this URL into Q-SPECTRA -> Inference Hub -> Backend URL")
@@ -164,7 +164,7 @@ def launch_ngrok_tunnel(port: int, auth_token: str | None) -> str:
     tunnel = ngrok.connect(addr=port, proto="http")
     public_url = tunnel.public_url.replace("http://", "https://")
     print("\n" + "=" * 68)
-    print("  Q-SPECTRA 17E LIVE COLAB BACKEND READY (NGROK)")
+    print("  Q-SPECTRA QUANTUM HOME LIVE COLAB BACKEND READY (NGROK)")
     print(f"  Public HTTPS Bridge URL : {public_url}")
     print(f"  Health Endpoint         : {public_url}/api/health")
     print("  Paste this URL into Q-SPECTRA -> Inference Hub -> Backend URL")
@@ -173,7 +173,7 @@ def launch_ngrok_tunnel(port: int, auth_token: str | None) -> str:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Launch Q-SPECTRA 17E FastAPI + Ollama + Tunnel on Colab")
+    parser = argparse.ArgumentParser(description="Launch Q-SPECTRA Quantum Home FastAPI + Ollama + Tunnel on Colab")
     parser.add_argument("--port", type=int, default=8000, help="FastAPI port (default: 8000)")
     parser.add_argument(
         "--tunnel",
@@ -182,7 +182,7 @@ def main() -> None:
         help="Tunnel provider (default: cloudflared)",
     )
     parser.add_argument("--ngrok-token", default=None, help="Optional ngrok authtoken")
-    parser.add_argument("--model", default="qwen-17e-cema", help="Ollama model tag to verify")
+    parser.add_argument("--model", default="qwen-quantum-copilot", help="Ollama model tag to verify")
     parser.add_argument("--skip-ollama", action="store_true", help="Skip Ollama server startup")
     args = parser.parse_args()
 

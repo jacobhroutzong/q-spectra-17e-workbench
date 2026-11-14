@@ -20,7 +20,7 @@ class TestQSpectraBackend(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         data = resp.json()
         self.assertEqual(data["status"], "ok")
-        self.assertEqual(data["service"], "q-spectra-17e-bridge")
+        self.assertEqual(data["service"], "q-spectra-quantum-home")
         self.assertIn("physics_solver", data)
 
     def test_rydberg_master_eq_thermal_and_mot(self) -> None:

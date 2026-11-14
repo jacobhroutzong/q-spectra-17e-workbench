@@ -1,5 +1,5 @@
 """
-Q-SPECTRA // 17E Quantum CEMA FastAPI Microservice
+Q-SPECTRA // Universal Quantum Home & Simulation Platform FastAPI Microservice
 Provides:
   1. POST /api/physics/rydberg-master-eq  (4-level ladder EIT/AT susceptibility via QuTiP or NumPy)
   2. POST /api/chat                       (Unified Ollama / Hugging Face Pro proxy with <think> parser)
@@ -20,7 +20,7 @@ from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from intel_harvester import harvest_intel_feed, synthesize_17e_challenge
+from intel_harvester import harvest_intel_feed, synthesize_quantum_challenge
 from sdr_processor import analyze_iq_samples, decode_iq_bytes, generate_synthetic_iq
 
 try:
@@ -36,9 +36,9 @@ BOHR_RADIUS = 5.29177210903e-11
 ELEMENTARY_CHARGE = 1.602176634e-19
 
 app = FastAPI(
-    title="Q-SPECTRA 17E Quantum CEMA Bridge",
-    version="2.0.0",
-    description="FastAPI physics & LLM inference bridge for Q-SPECTRA Workbench",
+    title="Q-SPECTRA Universal Quantum Home Bridge",
+    version="2.3.0",
+    description="FastAPI physics & LLM inference bridge for Q-SPECTRA Quantum Home",
 )
 
 app.add_middleware(
@@ -68,11 +68,11 @@ class ChatRequest(BaseModel):
     prompt: str
     mode: Literal["offline", "ollama", "hf_pro"] = "offline"
     ollama_url: str = "http://localhost:11434"
-    ollama_model: str = "qwen-17e-cema"
+    ollama_model: str = "qwen-quantum-copilot"
     hf_token: str = ""
     hf_model: str = "Qwen/Qwen2.5-32B-Instruct"
     system_context: str = (
-        "You are Q-SPECTRA, an elite US Army 17E Electronic Warfare & Quantum Physics "
+        "You are Q-SPECTRA, a universal Quantum Physics, Quantum Computing, and Quantum Sensing "
         "AI Co-Pilot fine-tuned via Unsloth."
     )
     telemetry: Optional[dict[str, Any]] = None
@@ -176,7 +176,7 @@ def _solve_4level_numpy(
 def health_check() -> dict[str, Any]:
     return {
         "status": "ok",
-        "service": "q-spectra-17e-bridge",
+        "service": "q-spectra-quantum-home",
         "qutip_available": QUTIP_AVAILABLE,
         "physics_solver": "qutip_4level_lindblad" if QUTIP_AVAILABLE else "numpy_4level_bloch",
     }
@@ -263,7 +263,7 @@ class SynthesizeChallengeRequest(BaseModel):
     source_citation: str = "OSINT Literature"
     mode: Literal["offline", "ollama", "hf_pro"] = "offline"
     ollama_url: str = "http://localhost:11434"
-    ollama_model: str = "qwen-17e-cema"
+    ollama_model: str = "qwen-quantum-copilot"
     hf_token: str = ""
     hf_model: str = "Qwen/Qwen2.5-32B-Instruct"
 
@@ -316,7 +316,7 @@ async def post_analyze_iq(
 
 @app.post("/api/intel/synthesize-challenge")
 async def post_synthesize_challenge(req: SynthesizeChallengeRequest) -> dict[str, Any]:
-    return await synthesize_17e_challenge(
+    return await synthesize_quantum_challenge(
         text=req.text,
         title=req.title,
         source_citation=req.source_citation,
@@ -342,7 +342,7 @@ async def chat_proxy(req: ChatRequest) -> dict[str, Any]:
         pnt = (req.telemetry or {}).get("pnt", {})
         raw = (
             "<think>\n"
-            f"1. Inspecting live 17E telemetry: Rydberg n={ryd.get('nPrincipal', 58)} "
+            f"1. Inspecting live Quantum Home telemetry: Rydberg n={ryd.get('nPrincipal', 58)} "
             f"({ryd.get('species', 'Rb85')}) at {ryd.get('effectivePowerDbm', -15)} dBm -> "
             f"AT splitting {ryd.get('splittingMHz', 'N/A')} MHz.\n"
             f"2. Quantum Radar: Ns={rad.get('nsPhotons', 0.02)}, Nb={rad.get('nbThermal', 1200)}, "
@@ -351,7 +351,7 @@ async def chat_proxy(req: ChatRequest) -> dict[str, Any]:
             f"3. Quantum PNT: t={pnt.get('missionHours', 2.5)}h, MagNav Lock={'ON' if pnt.get('magNavLock', True) else 'OFF'}, "
             f"CEP={pnt.get('quantumPntErrorMeters', '4.2')} m.\n"
             "</think>\n"
-            "**Tactical Assessment (Q-SPECTRA Offline 17E CEMA Reference):**\n"
+            "**Physics Assessment (Q-SPECTRA Quantum Home Offline Reference):**\n"
             f"- **Rydberg ES ({ryd.get('species', 'Rb85')}, n={ryd.get('nPrincipal', 58)}):** "
             f"Measured Autler-Townes splitting is **{ryd.get('splittingMHz', 'N/A')} MHz** "
             f"({ryd.get('eFieldVm', 'N/A')} V/m). Classical LNA status: "

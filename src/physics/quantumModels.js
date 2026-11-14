@@ -1,5 +1,5 @@
 /**
- * Q-SPECTRA Physics Engine (17E Quantum CEMA Calculations)
+ * Q-SPECTRA Physics Engine (Universal Quantum Home & Simulation Calculations)
  * Provides SI-grounded approximations for Rydberg AT splitting, Quantum Illumination SNR, and Cold-Atom MagNav.
  */
 

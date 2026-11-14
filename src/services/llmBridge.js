@@ -3,7 +3,7 @@
  * Supports:
  * 1. FastAPI Backend Proxy (/api/chat) -> Ollama or Hugging Face Pro (avoids browser CORS)
  * 2. Direct Ollama / HF Pro fallback
- * 3. Deterministic Tactical Fallback (Offline 17E CEMA Reference Engine with live telemetry)
+ * 3. Deterministic Reference Fallback (Offline Quantum Physics Engine with live telemetry)
  */
 
 export function parseThinkBlocks(rawText = '') {
@@ -44,17 +44,17 @@ export function formatTelemetryContext(telemetry) {
     .join('\n');
 }
 
-export async function queryQwenCemaCoPilot({
+export async function queryQuantumCoPilot({
   prompt,
   mode = 'offline', // 'ollama' | 'hf_pro' | 'offline'
   backendUrl = 'http://localhost:8000',
   useBackendProxy = true,
   ollamaUrl = 'http://localhost:11434',
-  ollamaModel = 'qwen-17e-cema',
+  ollamaModel = 'qwen-quantum-copilot',
   hfToken = '',
   hfModel = 'Qwen/Qwen2.5-32B-Instruct',
   telemetry = null,
-  systemContext = 'You are Q-SPECTRA, an elite US Army 17E Electronic Warfare & Quantum Physics AI Co-Pilot fine-tuned via Unsloth.'
+  systemContext = 'You are Q-SPECTRA, a universal Quantum Physics, Quantum Computing, and Quantum Sensing AI Co-Pilot fine-tuned via Unsloth.'
 }) {
   const telemetryText = formatTelemetryContext(telemetry);
   const fullSystemContext = telemetryText
@@ -151,18 +151,20 @@ export async function queryQwenCemaCoPilot({
   const pnt = telemetry?.pnt;
 
   const raw = `<think>
-1. Analyzing 17E CEMA query against SI-traceable quantum sensing constraints.
+1. Analyzing Quantum Home query against SI-traceable quantum sensing and physics constraints.
 2. Live Rydberg state: ${ryd ? `${ryd.species} n=${ryd.nPrincipal}, ${ryd.effectivePowerDbm} dBm @ ${ryd.rfFreqGhz} GHz -> Δf_AT=${ryd.splittingMHz} MHz` : 'nominal'}.
 3. Live Radar state: ${rad ? `Ns=${rad.nsPhotons}, Nb=${rad.nbThermal}, DRFM=${rad.drfmSpoofActive}, Advantage=+${rad.advantageDb} dB` : 'nominal'}.
 4. Live PNT state: ${pnt ? `t=${pnt.missionHours}h, MagNav=${pnt.magNavLock}, CEP=${pnt.quantumPntErrorMeters}m` : 'nominal'}.
 </think>
-**Tactical Assessment (Qwen 3.8 27B 17E-CEMA Offline Reference):**
+**Physics Assessment (Q-SPECTRA Quantum Home Offline Reference):**
 - **Rydberg Atomic ES:** ${ryd ? `With ${ryd.species} tuned to $n=${ryd.nPrincipal}$ at ${ryd.effectivePowerDbm} dBm (${ryd.rfFreqGhz} GHz), Autler-Townes splitting is **${ryd.splittingMHz} MHz** (${ryd.eFieldVm} V/m). Classical GaAs LNA status: **${ryd.lnaBurnout ? 'BURNOUT / SATURATED' : 'NOMINAL'}**, while the dielectric vapor cell remains survivable.` : 'Tuning to n=68 provides wideband SI-traceable optical readout without LNA burnout.'}
 - **Quantum EP Counter-DRFM:** ${rad ? `At $N_b=${rad.nbThermal}$ thermal photons/mode, SPDC joint-detection yields **+${rad.advantageDb} dB** SNR advantage and ${rad.drfmSpoofActive ? 'actively suppresses the 4 uncorrelated DRFM ghost targets.' : 'ready to reject DRFM spoofing.'}` : 'Retaining the entangled idler mode rejects uncorrelated DRFM repeater spoofing.'}
 - **Contested PNT / MagNav:** ${pnt ? `At ${pnt.missionHours} hrs under +${pnt.gpsSpoofDb} dB GPS spoofing, Cold-Atom INS + NV-Diamond MagNav (${pnt.magNavLock ? 'LOCKED' : 'UNLOCKED'}) holds **${pnt.quantumPntErrorMeters} m CEP** vs. ${pnt.classicalInsDriftMeters} m classical INS drift.` : 'Crustal magnetic anomaly matching bounds CEP drift.'}`;
 
   return { ...parseThinkBlocks(raw), viaBackend: false, mode: 'offline' };
 }
+
+export const queryQwenCemaCoPilot = queryQuantumCoPilot;
 
 export async function fetchRydbergMasterEq(backendUrl, params) {
   const res = await fetch(`${backendUrl.replace(/\/$/, '')}/api/physics/rydberg-master-eq`, {

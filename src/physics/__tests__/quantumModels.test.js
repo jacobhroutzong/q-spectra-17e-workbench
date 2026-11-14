@@ -8,6 +8,7 @@ import {
   generateSyntheticIqClient,
   analyzeIqClient,
 } from '../sdrEngine.js';
+import { CIRCUIT_PRESETS, simulateCircuit } from '../quantumCircuitEngine.js';
 
 describe('computeRydbergSplitting', () => {
   it('scales dipole moment with n^2', () => {
@@ -117,4 +118,31 @@ describe('sdrEngine.js client-side Radix-2 FFT & synthetic threats', () => {
       }
     }
   );
+});
+
+describe('quantumCircuitEngine.js', () => {
+  it('prepares Bell State |Φ+> with ~50% |00> and ~50% |11>', () => {
+    const { numQubits, operations } = CIRCUIT_PRESETS.bell;
+    const res = simulateCircuit(numQubits, operations);
+    expect(res.basisStates[0].prob).toBeCloseTo(0.5, 4);
+    expect(res.basisStates[3].prob).toBeCloseTo(0.5, 4);
+    expect(res.basisStates[1].prob).toBeCloseTo(0, 4);
+    expect(res.basisStates[2].prob).toBeCloseTo(0, 4);
+  });
+
+  it('prepares 3-qubit GHZ state with ~50% |000> and ~50% |111>', () => {
+    const { numQubits, operations } = CIRCUIT_PRESETS.ghz3;
+    const res = simulateCircuit(numQubits, operations);
+    expect(res.basisStates[0].prob).toBeCloseTo(0.5, 4);
+    expect(res.basisStates[7].prob).toBeCloseTo(0.5, 4);
+    expect(res.estimatedFidelity).toBeGreaterThan(95);
+  });
+
+  it('amplifies |101> above 90% in 2-iteration Grover Search Oracle', () => {
+    const { numQubits, operations } = CIRCUIT_PRESETS.grover101;
+    const res = simulateCircuit(numQubits, operations);
+    const target101 = res.basisStates.find((s) => s.label === '|101⟩');
+    expect(target101).toBeDefined();
+    expect(target101.prob).toBeGreaterThan(0.9);
+  });
 });

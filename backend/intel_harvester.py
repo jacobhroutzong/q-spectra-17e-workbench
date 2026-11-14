@@ -345,7 +345,7 @@ async def harvest_intel_feed(topic: str = "rydberg", force_refresh: bool = False
 def _deterministic_synthesize_challenge(
     text: str, title: str = "", source_citation: str = "OSINT Literature"
 ) -> dict[str, Any]:
-    """Deterministic physics-grounded 17E CEMA scenario & challenge synthesizer."""
+    """Deterministic physics-grounded Quantum Home scenario & challenge synthesizer."""
     blob = f"{title} {text}".lower()
 
     # Detect domain from keywords
@@ -365,7 +365,7 @@ def _deterministic_synthesize_challenge(
             "code": "OSINT-EP",
             "title": title[:68] if title else "OSINT Counter-DRFM Quantum Illumination Scenario",
             "sourceCitation": source_citation,
-            "mosTask": "17E-EP-5022 // OSINT-Derived Entangled Target Discrimination",
+            "mosTask": "QILLUM-5022 // Literature Entangled Target Discrimination",
             "objective": (
                 f"Compute the Quantum Illumination SNR advantage (dB) over classical coherent radar "
                 f"with Ns={ns}, Nb={nb}, kappa={kappa}, M=1e6 under active DRFM repeater spoofing."
@@ -404,7 +404,7 @@ def _deterministic_synthesize_challenge(
             "code": "OSINT-PNT",
             "title": title[:68] if title else "OSINT GPS-Denied Cold-Atom MagNav Mission",
             "sourceCitation": source_citation,
-            "mosTask": "17E-PNT-6018 // OSINT-Derived Crustal MagNav Fix",
+            "mosTask": "MAGNAV-6018 // Literature Crustal MagNav Fix",
             "objective": (
                 f"Under a +{spoof_db} dB L1/L2 GPS spoofing attack over {hrs} hours, determine the "
                 "bounded radial CEP (meters) of Cold-Atom INS + NV-Diamond MagNav with crustal lock."
@@ -448,7 +448,7 @@ def _deterministic_synthesize_challenge(
         "code": "OSINT-ES",
         "title": title[:68] if title else f"OSINT {species} Rydberg Autler-Townes Scenario",
         "sourceCitation": source_citation,
-        "mosTask": "17E-ES-4045 // OSINT-Derived Rydberg Optical Readout",
+        "mosTask": "RYDBERG-4045 // Literature Rydberg Optical Readout",
         "objective": (
             f"Tune the {species} vapor cell to n={n_val} at {pwr} dBm ({freq} GHz) and determine the "
             "resulting Autler-Townes splitting Δf_AT in MHz."
@@ -476,24 +476,24 @@ def _deterministic_synthesize_challenge(
     }
 
 
-async def synthesize_17e_challenge(
+async def synthesize_quantum_challenge(
     text: str,
     title: str = "",
     source_citation: str = "OSINT Literature",
     mode: str = "offline",
     ollama_url: str = "http://localhost:11434",
-    ollama_model: str = "qwen-17e-cema",
+    ollama_model: str = "qwen-quantum-copilot",
     hf_token: str = "",
     hf_model: str = "Qwen/Qwen2.5-32B-Instruct",
 ) -> dict[str, Any]:
-    """Synthesize a playable 17E CEMA challenge JSON from OSINT text."""
+    """Synthesize a playable Quantum Home challenge JSON from scientific literature."""
     base_challenge = _deterministic_synthesize_challenge(text, title, source_citation)
 
     if mode == "offline":
         return base_challenge
 
     sys_prompt = (
-        "You are Q-SPECTRA, a US Army 17E Quantum CEMA scenario generator. "
+        "You are Q-SPECTRA, a universal Quantum Physics & Simulation scenario generator. "
         "Given a scientific abstract or post, output ONLY valid JSON with keys: "
         "title, mosTask, objective, expectedFormula, targetAnswer (number), tolerance (number), unit, hint."
     )

@@ -7,7 +7,7 @@ import {
   ExternalLink,
   PlusCircle
 } from 'lucide-react';
-import { queryQwenCemaCoPilot } from '../services/llmBridge';
+import { queryQuantumCoPilot } from '../services/llmBridge';
 
 const TOPICS = [
   { id: 'rydberg', label: 'Rydberg ES' },
@@ -100,7 +100,7 @@ function clientFallbackSynthesize(text, title, sourceCitation) {
       code: 'OSINT-EP',
       title: title ? title.slice(0, 64) : 'OSINT Counter-DRFM Scenario',
       sourceCitation,
-      mosTask: '17E-EP-5022 // OSINT Entangled Radar Discrimination',
+      mosTask: 'QILLUM-5022 // Literature Entangled Radar Discrimination',
       objective:
         'Compute Quantum Illumination SNR advantage (dB) with Ns=0.03, Nb=1500, kappa=0.01, M=1e6 under DRFM spoofing.',
       expectedFormula: '10 * log10(SNR_quantum / SNR_classical)',
@@ -121,7 +121,7 @@ function clientFallbackSynthesize(text, title, sourceCitation) {
       code: 'OSINT-PNT',
       title: title ? title.slice(0, 64) : 'OSINT GPS-Denied MagNav Fix',
       sourceCitation,
-      mosTask: '17E-PNT-6018 // OSINT Crustal MagNav Lock',
+      mosTask: 'MAGNAV-6018 // Literature Crustal MagNav Lock',
       objective:
         'Under +35 dB GPS spoofing over 3.5 hours, determine bounded radial CEP (m) with NV-Diamond MagNav lock.',
       expectedFormula: '4.2 + 0.4 * sin(mission_hours)',
@@ -141,7 +141,7 @@ function clientFallbackSynthesize(text, title, sourceCitation) {
     code: 'OSINT-ES',
     title: title ? title.slice(0, 64) : 'OSINT 133Cs Rydberg Splitting Scenario',
     sourceCitation,
-    mosTask: '17E-ES-4045 // OSINT Rydberg Optical Readout',
+    mosTask: 'RYDBERG-4045 // Literature Rydberg Optical Readout',
     objective:
       'Tune 133Cs vapor cell to n=68 at -5 dBm (94.0 GHz) and determine Autler-Townes splitting Δf_AT in MHz.',
     expectedFormula: 'delta_f_AT = (mu * E) / h',
@@ -288,8 +288,8 @@ export default function QuantumIntelFeed({
   const handleAnalyze = async (item) => {
     setAnalyzingId(item.id);
     try {
-      const prompt = `Analyze this quantum research item for a US Army 17E CEMA operator:\nTitle: ${item.title}\nSource: ${item.source}\nAbstract: ${item.abstract}\nExplain tactical impact on Rydberg ES, Quantum EP, or Contested PNT.`;
-      const res = await queryQwenCemaCoPilot({
+      const prompt = `Analyze this quantum research item for a Quantum Physics & Simulation researcher:\nTitle: ${item.title}\nSource: ${item.source}\nAbstract: ${item.abstract}\nExplain practical impact on Rydberg Metrology, Quantum Illumination Radar, or Quantum PNT.`;
+      const res = await queryQuantumCoPilot({
         prompt,
         mode: inferenceMode,
         backendUrl,
@@ -336,7 +336,7 @@ export default function QuantumIntelFeed({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'qspectra_17e_sft_corpus.jsonl';
+    a.download = 'qspectra_quantum_sft_corpus.jsonl';
     a.click();
     URL.revokeObjectURL(url);
   };

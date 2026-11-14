@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, Brain, ChevronDown, ChevronRight, Sliders } from 'lucide-react';
-import { queryQwenCemaCoPilot } from '../services/llmBridge';
+import { queryQuantumCoPilot } from '../services/llmBridge';
 
 export const CHALLENGES = [
   {
     id: 'ch1',
-    code: 'CEMA-101',
+    code: 'QSIM-101',
     title: 'Wideband Rydberg E-Field Calibration',
-    mosTask: '17E-ES-4012 // Non-Metallic Vapor Cell Receiver',
+    mosTask: 'RYDBERG-101 // Atmospheric & Lab RF Metrology',
     objective:
       'Compute the incident electric field E (V/m) from an observed Autler-Townes splitting of 42.5 MHz in 85Rb at principal quantum number n=62 (mu = 3.25e-26 C*m).',
     expectedFormula: 'E = (h * delta_f) / mu',
@@ -18,11 +18,11 @@ export const CHALLENGES = [
   },
   {
     id: 'ch2',
-    code: 'CEMA-204',
-    title: 'HPM / EMP Front-End Survivability Triage',
-    mosTask: '17E-EP-4028 // High-Power Microwave Electronic Protection',
+    code: 'QSIM-204',
+    title: 'High-Field Vapor Cell Survivability Threshold',
+    mosTask: 'RYDBERG-204 // High-Power RF Saturation Limits',
     objective:
-      'An adversary fires a +28 dBm HPM pulse at 9.4 GHz. Determine the maximum safe principal quantum number n where the Autler-Townes splitting stays below 180 MHz to prevent stark-shift state mixing.',
+      'A high-power RF transmitter emits a +28 dBm pulse at 9.4 GHz. Determine the maximum safe principal quantum number n where the Autler-Townes splitting stays below 180 MHz to prevent Stark-shift state mixing.',
     expectedFormula: 'Tune n slider in Rydberg Lab at +28 dBm',
     targetAnswer: 44,
     tolerance: 6,
@@ -31,24 +31,24 @@ export const CHALLENGES = [
   },
   {
     id: 'ch3',
-    code: 'CEMA-309',
-    title: 'Counter-DRFM Entangled Idler Discrimination',
-    mosTask: '17E-EP-5011 // Reject Coherent Deceptive Jamming',
+    code: 'QSIM-309',
+    title: 'Entangled Idler Clutter Discrimination',
+    mosTask: 'QILLUM-309 // Quantum Illumination SNR Gain',
     objective:
-      'Calculate the Quantum Illumination SNR advantage (in dB) over a classical coherent radar when thermal noise Nb = 1200 photons/mode and DRFM spoofing is active (use M=1e6, kappa=0.01, Ns=0.02).',
+      'Calculate the Quantum Illumination SNR advantage (in dB) over a classical coherent radar when thermal noise Nb = 1200 photons/mode and coherent spoofing clutter is active (use M=1e6, kappa=0.01, Ns=0.02).',
     expectedFormula: '10 * log10(SNR_quantum / SNR_classical)',
     targetAnswer: 6.84,
     tolerance: 0.6,
     unit: 'dB',
-    hint: 'Quantum Illumination achieves a 4x (6.02 dB) base error-exponent gain plus immunity to injected uncorrelated DRFM photons.'
+    hint: 'Quantum Illumination achieves a 4x (6.02 dB) base error-exponent gain plus immunity to injected uncorrelated repeater photons.'
   },
   {
     id: 'ch4',
-    code: 'CEMA-415',
-    title: 'GPS-Denied Cold-Atom INS + MagNav Fix',
-    mosTask: '17E-PNT-6004 // Contested PNT Navigation',
+    code: 'QSIM-415',
+    title: 'Aerospace Cold-Atom INS + MagNav Fix',
+    mosTask: 'MAGNAV-415 // GNSS-Denied Aerospace PNT',
     objective:
-      'Under a +25 dB L1/L2 GPS meaconing attack over a 4-hour mission, compute the radial CEP position error (in meters) of a hybrid Cold-Atom Interferometer + NV-Diamond MagNav system with crustal map lock.',
+      'Under +25 dB GNSS interference over a 4-hour flight, compute the radial CEP position error (in meters) of a hybrid Cold-Atom Interferometer + NV-Diamond MagNav system with crustal map lock.',
     expectedFormula: 'Bounded by crustal magnetic anomaly gradient correlation (~4.2 m CEP)',
     targetAnswer: 4.2,
     tolerance: 1.5,
@@ -81,7 +81,7 @@ export default function ChallengeArena({
   const [feedbackMsg, setFeedbackMsg] = useState(null);
 
   const [copilotPrompt, setCopilotPrompt] = useState(
-    'Analyze my current Rydberg, Quantum Radar, and MagNav telemetry and recommend 17E CEMA tactical adjustments.'
+    'Analyze my current Rydberg, Quantum Radar, and MagNav telemetry and recommend parameter optimizations.'
   );
   const [copilotResult, setCopilotResult] = useState(null);
   const [copilotLoading, setCopilotLoading] = useState(false);
@@ -121,7 +121,7 @@ export default function ChallengeArena({
   const handleRunCopilot = async () => {
     setCopilotLoading(true);
     try {
-      const res = await queryQwenCemaCoPilot({
+      const res = await queryQuantumCoPilot({
         prompt: copilotPrompt,
         mode: inferenceMode,
         backendUrl,
@@ -150,7 +150,7 @@ export default function ChallengeArena({
       <div className="bg-zinc-900/40 backdrop-blur-md border border-white/[0.07] rounded-2xl p-6 space-y-5">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-mono uppercase tracking-wider text-zinc-400">
-            17E Challenge Arena
+            Quantum Challenge Arena
           </h2>
           <span className="text-xs font-mono text-zinc-400">
             {Object.keys(solvedMap).length}/{allChallenges.length} Solved

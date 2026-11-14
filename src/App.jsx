@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { BookOpen, CheckCircle2 } from 'lucide-react';
 import { computeRydbergSplitting, computeQuantumIlluminationSNR } from './physics/quantumModels';
 import RydbergLab from './components/RydbergLab';
 import QuantumRadarLab from './components/QuantumRadarLab';
@@ -8,15 +8,20 @@ import ChallengeArena from './components/ChallengeArena';
 import InferenceHub from './components/InferenceHub';
 import QuantumIntelFeed from './components/QuantumIntelFeed';
 import TheatreMap3D from './components/TheatreMap3D';
+import QuantumCodingLab from './components/QuantumCodingLab';
+import QuantumCryptoLab from './components/QuantumCryptoLab';
+import ParameterGlossary from './components/ParameterGlossary';
 
 const TABS = [
-  { id: 'rydberg', label: 'Rydberg', shortcut: '1' },
-  { id: 'radar', label: 'Radar', shortcut: '2' },
-  { id: 'pnt', label: 'MagNav', shortcut: '3' },
-  { id: 'theatre3d', label: 'Theatre', shortcut: '4' },
-  { id: 'arena', label: 'Arena', shortcut: '5' },
-  { id: 'intel', label: 'OSINT', shortcut: '6' },
-  { id: 'hub', label: 'Models', shortcut: '7' }
+  { id: 'rydberg', label: 'Rydberg', subtitle: 'Sensing', shortcut: '1' },
+  { id: 'radar', label: 'Radar', subtitle: 'Quantum Illumination', shortcut: '2' },
+  { id: 'pnt', label: 'MagNav', subtitle: 'Quantum PNT', shortcut: '3' },
+  { id: 'theatre3d', label: 'Theatre', subtitle: 'EMS COP', shortcut: '4' },
+  { id: 'coding', label: 'Coding', subtitle: 'Circuits & VQE', shortcut: '5' },
+  { id: 'crypto', label: 'Crypto', subtitle: 'BB84 QKD', shortcut: '6' },
+  { id: 'arena', label: 'Arena', subtitle: 'Challenges', shortcut: '7' },
+  { id: 'intel', label: 'OSINT', subtitle: 'Literature', shortcut: '8' },
+  { id: 'hub', label: 'Models', subtitle: 'LLM / Distillation Hub', shortcut: '9' }
 ];
 
 export default function App() {
@@ -48,14 +53,15 @@ export default function App() {
   const [backendUrl, setBackendUrl] = useState('http://localhost:8000');
   const [useBackendProxy, setUseBackendProxy] = useState(true);
   const [ollamaUrl, setOllamaUrl] = useState('http://localhost:11434');
-  const [ollamaModel, setOllamaModel] = useState('qwen-17e-cema');
+  const [ollamaModel, setOllamaModel] = useState('qwen-quantum-copilot');
   const [hfToken, setHfToken] = useState('');
   const [hfModel, setHfModel] = useState('Qwen/Qwen2.5-32B-Instruct');
 
-  // Dynamic OSINT Challenges, Training Corpus, & Tactical Toast
+  // Dynamic OSINT Challenges, Training Corpus, Glossary Drawer, & Tactical Toast
   const [dynamicChallenges, setDynamicChallenges] = useState([]);
   const [activeChallengeId, setActiveChallengeId] = useState(null);
   const [trainingCorpus, setTrainingCorpus] = useState([]);
+  const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [toastMsg, setToastMsg] = useState(null);
 
   // Keyboard shortcuts 1-7 when not typing in an input
@@ -200,8 +206,8 @@ export default function App() {
         {/* Left: Minimalist Wordmark */}
         <div className="flex items-center gap-2.5 shrink-0">
           <span className="text-sm font-semibold tracking-tight text-zinc-100">Q-SPECTRA</span>
-          <span className="text-[10px] font-mono text-zinc-400 border border-white/10 px-1.5 py-0.5 rounded">
-            17E
+          <span className="text-[10px] font-mono text-zinc-400 border border-white/10 px-1.5 py-0.5 rounded uppercase">
+            Quantum Home
           </span>
         </div>
 
@@ -213,7 +219,7 @@ export default function App() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                title={`Press ${tab.shortcut}`}
+                title={`${tab.label} (${tab.subtitle}) — Press ${tab.shortcut}`}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
                   active
                     ? 'bg-zinc-100 text-zinc-950 shadow-sm'
@@ -226,16 +232,27 @@ export default function App() {
           })}
         </nav>
 
-        {/* Right: Compact Live Status Dot */}
-        <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-400 shrink-0">
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${
-              inferenceMode === 'offline' ? 'bg-zinc-400' : 'bg-emerald-400 animate-pulse'
-            }`}
-          />
-          <span className="text-zinc-300">{modeLabel}</span>
-          <span className="text-zinc-600">/</span>
-          <span className="text-zinc-400">{checkpointLabel}</span>
+        {/* Right: Glossary Trigger + Compact Live Status Dot */}
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={() => setGlossaryOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900/80 border border-white/[0.08] text-xs font-medium text-zinc-300 hover:text-white hover:border-white/20 transition"
+            title="Open Parameter Glossary & Physics Guide"
+          >
+            <BookOpen className="w-3.5 h-3.5 text-sky-400" />
+            <span className="hidden md:inline">Glossary</span>
+          </button>
+
+          <div className="hidden sm:flex items-center gap-2 text-xs font-mono text-zinc-400">
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                inferenceMode === 'offline' ? 'bg-zinc-400' : 'bg-emerald-400 animate-pulse'
+              }`}
+            />
+            <span className="text-zinc-300">{modeLabel}</span>
+            <span className="text-zinc-600">/</span>
+            <span className="text-zinc-400">{checkpointLabel}</span>
+          </div>
         </div>
       </header>
 
@@ -312,6 +329,10 @@ export default function App() {
           <TheatreMap3D telemetry={missionTelemetry} dispatchScenario={dispatchScenario} />
         )}
 
+        {activeTab === 'coding' && <QuantumCodingLab />}
+
+        {activeTab === 'crypto' && <QuantumCryptoLab />}
+
         {activeTab === 'arena' && (
           <ChallengeArena
             inferenceMode={inferenceMode}
@@ -362,6 +383,12 @@ export default function App() {
           />
         )}
       </main>
+
+      <ParameterGlossary
+        isOpen={glossaryOpen}
+        onClose={() => setGlossaryOpen(false)}
+        activeTab={activeTab}
+      />
     </div>
   );
 }
